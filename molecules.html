@@ -29,7 +29,7 @@ function startGame() {
     playerSize = 20;
     player = new component(playerSize, playerSize, "carbon.png", 50, cHeight/2, "image");
     timer = new component("20px","Consolas","black",0,400,"text");
-    foodCount = new component("20px", "Consolas","black", 200, 400,"text");
+    foodCount = new component("20px", "Consolas","black", 200, 390,"text");
     myGameArea.start();
 }
 var myGameArea = {
@@ -113,15 +113,6 @@ controller = {
 };
 function updateGameArea() {
     var x, y;
-    for (i = 0; i < myObstacles.length; i += 1) {
-        if (player.crashWith(myObstacles[i])) {
-            myGameArea.stop();
-            ctx.fillText("GAME OVER", 300, 200);
-            return;
-        }
-
-
-    }
 
     for (i = 0; i< food.length; i += 1){
         if (player.crashWith(food[i])) {
@@ -133,6 +124,39 @@ function updateGameArea() {
         }
 
     }
+    for (i = 0; i < myObstacles.length; i += 1) {
+        if (player.crashWith(myObstacles[i])) {
+            if (eaten >0) {
+                myObstacles.splice(i, 1);
+                eaten -= 1;
+                break;
+            }
+            
+            else {
+
+                myGameArea.stop();
+                ctx.fillText("GAME OVER", 300, 200);
+                return;
+            }
+
+            // if (eaten >=1){
+            //     eaten -= 1;
+
+            // }
+            // else if (eaten == 0) {
+            // myGameArea.stop();
+            // ctx.fillText("GAME OVER", 300, 200);
+            // return;
+
+            // }
+            
+            
+        }
+
+
+    }
+
+    
     
 
     myGameArea.clear();
@@ -161,7 +185,7 @@ function updateGameArea() {
     var time = (Math.round((myGameArea.frameNo*0.01)*10)/10).toFixed(1);
     timer.text = "TIME: "+ time;
     timer.update();
-    foodCount.text = "Atoms eaten: "+ eaten;
+    foodCount.text = "Hydrogen eaten: "+ eaten;
     foodCount.update();
     player.newPos();
     player.update();
